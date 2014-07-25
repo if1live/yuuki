@@ -88,7 +88,7 @@ namespace YuukiTest
             Assert.AreEqual(chunker.VoxelIndexFromCoordinates(-32, 0, 0), 0);
         }
 
-        /*
+        
         [Test]
         public void TestVoxelIndexFromPosition()
         {
@@ -105,7 +105,6 @@ namespace YuukiTest
             Assert.AreEqual(chunker.VoxelIndexFromPosition(new Position(-0.9999f, 0, 0)), 31);
             Assert.AreEqual(chunker.VoxelIndexFromPosition(new Position(-1, 0, 0)), 31);
         }
-         */
 
         [Test]
         public void TestGetBounds()

@@ -49,11 +49,24 @@ namespace Yuuki
         }
     }
 
-    public struct ChunkerParameter
+    public class ChunkerParameter
     {
         public int distance;
         public int chunkSize;
         public int cubeSize;
+
+        public ChunkerParameter()
+        {
+            /*
+             * 기본값 설정
+             * https://github.com/maxogden/voxel/blob/ff89d80f4dfa09dec38d72afb30e4107328ee9d4/chunker.js#L11-L13
+             */
+            this.distance = 2;
+            this.chunkSize = 32;
+            this.cubeSize = 25;
+
+            //this.generateVoxelChunk = opts.generateVoxelChunk
+        }
     }
 
     public class Chunker
@@ -177,7 +190,7 @@ namespace Yuuki
 
         public int VoxelIndexFromPosition(Position pos)
         {
-            Position v = this.VoxelVector(pos);
+            ChunkPosition v = this.VoxelVector(pos);
             return this.VoxelIndex(v);
         }
 
@@ -235,23 +248,21 @@ namespace Yuuki
         }
 
         // deprecated
-        public int VoxelIndex(Position voxelVector)
+        public int VoxelIndex(ChunkPosition voxelVector)
         {
-            return -1;
-            //TODO
-            //int vidx = VoxelIndexFromCoordinates(voxelVector.x, voxelVector.y, voxelVector.z);
-            //return vidx;
+            int vidx = VoxelIndexFromCoordinates(voxelVector.x, voxelVector.y, voxelVector.z);
+            return vidx;
         }
 
         // deprecated
-        public Position VoxelVector(Position pos)
+        public ChunkPosition VoxelVector(Position pos)
         {
             int cubeSize = this.cubeSize;
             int mask = (1 << this.chunkBits) - 1;
             int vx = (int)(Math.Floor(pos.x / cubeSize)) & mask;
             int vy = (int)(Math.Floor(pos.y / cubeSize)) & mask;
             int vz = (int)(Math.Floor(pos.z / cubeSize)) & mask;
-            return new Position(vx, vy, vz);
+            return new ChunkPosition(vx, vy, vz);
         }
     }
 }
