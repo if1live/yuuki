@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Sample.cs" />
+     <None Include="Assets\Temp\do-not-delete.txt" />
  <Reference Include="Yuuki">
  <HintPath>D:/github/yuuki/Client/Assets/Temp/Yuuki.dll</HintPath>
  </Reference>

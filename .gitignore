@@ -195,3 +195,7 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+
+# fake project
+ClientAndroid
+ClientWeb
