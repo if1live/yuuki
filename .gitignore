@@ -199,3 +199,23 @@ FakesAssemblies/
 # fake project
 ClientAndroid
 ClientWeb
+
+# ignore extra assets
+Client/Assets/OVR
+Client/Assets/OVR.meta
+Client/Assets/Dive
+Client/Assets/Dive.meta
+Client/Assets/InControl
+Client/Assets/InControl.meta
+Client/Assets/Plugins
+Client/Assets/Plugins.meta
+Client/Assets/Standard Assets
+Client/Assets/Standard Assets.meta
+Client/Assets/UnityTestTools
+Client/Assets/UnityTestTools.meta
+Client/Assets/prototype_textures
+Client/Assets/prototype_textures.meta
+Client/Assets/Models
+Client/Assets/Models.meta
+Client/Assets/UnityChan
+Client/Assets/UnityChan.meta
