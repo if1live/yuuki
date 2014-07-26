@@ -82,6 +82,7 @@ namespace Yuuki
         public int distance;
         public int chunkSize;
         public int cubeSize;
+        public IGenerateVoxelChunk generateVoxelChunk;
 
         public ChunkerParameter()
         {
@@ -92,8 +93,7 @@ namespace Yuuki
             this.distance = 2;
             this.chunkSize = 32;
             this.cubeSize = 25;
-
-            //this.generateVoxelChunk = opts.generateVoxelChunk
+            this.generateVoxelChunk = new DefaultGenerateVoxelChunk();
         }
     }
 
@@ -102,18 +102,19 @@ namespace Yuuki
         private int distance;
         private int chunkSize;
         private int cubeSize;
+        private IGenerateVoxelChunk generateVoxelChunk;
 
         private int chunkBits;
-        private Dictionary<string, Chunker> chunks;
+        public Dictionary<string, Chunk> chunks;
 
         public Chunker(ChunkerParameter param)
         {
             this.distance = param.distance;
             this.chunkSize = param.chunkSize;
             this.cubeSize = param.cubeSize;
+            this.generateVoxelChunk = param.generateVoxelChunk;
 
-            //this.generateVoxelChunk = opts.generateVoxelChunk
-            this.chunks = new Dictionary<string, Chunker>();
+            this.chunks = new Dictionary<string, Chunk>();
             //this.meshes = {}
 
             if (MathHelper.IsPowOfTwo(this.chunkSize) == false)
@@ -175,18 +176,15 @@ namespace Yuuki
             return new ChunkerBound(low, high);
         }
 
-        /*
-         * Chunker.prototype.generateChunk = function(x, y, z) {
-          var self = this
-          var bounds = this.getBounds(x, y, z)
-          var chunk = this.generateVoxelChunk(bounds[0], bounds[1], x, y, z)
-          var position = [x, y, z]
-          chunk.position = position
-          this.chunks[position.join('|')] = chunk
-          return chunk
+        public Chunk GenerateChunk(int x, int y, int z)
+        {
+            ChunkerBound bounds = GetBounds(x, y, z);
+            Chunk chunk = generateVoxelChunk.Generate(bounds.low, bounds.high);
+            ChunkPosition position = new ChunkPosition(x, y, z);
+            chunk.position = position;
+            this.chunks[position.ToKey()] = chunk;
+            return chunk;
         }
-         */
-
 
         public ChunkPosition ChunkAtCoordinates(int x, int y, int z)
         {
@@ -223,55 +221,43 @@ namespace Yuuki
         }
 
 
-        public int VoxelAtCoordinates(int x, int y, int z)
+        public byte VoxelAtCoordinates(int x, int y, int z)
         {
             string ckey = this.ChunkAtCoordinates(x, y, z).ToKey();
-            Chunker chunk = this.chunks[ckey];
-            if (chunk == null)
-            {
-                return -1;
-            }
+            Chunk chunk = this.chunks[ckey];
             int vidx = this.VoxelIndexFromCoordinates(x, y, z);
-            //TODO
-            //int v = chunk.voxels[vidx];
-            int v = 1;
+            byte v = chunk.voxels[vidx];
             return v;
         }
 
-        public int VoxelAtCoordinates(int x, int y, int z, int val)
+        public byte VoxelAtCoordinates(int x, int y, int z, byte val)
         {
             string ckey = this.ChunkAtCoordinates(x, y, z).ToKey();
-            Chunker chunk = this.chunks[ckey];
-            if (chunk == null)
-            {
-                return -1;
-            }
+            Chunk chunk = this.chunks[ckey];
             int vidx = this.VoxelIndexFromCoordinates(x, y, z);
-            //TODO
-            //int v = chunk.voxels[vidx];
-            //chunk.voxels[vidx] = val;
-            int v = 1;
+            byte v = chunk.voxels[vidx];
+            chunk.voxels[vidx] = val;
             return v;
         }
 
 
-        public int VoxelAtPosition(Position pos)
+        public byte VoxelAtPosition(Position pos)
         {
             int cubeSize = this.cubeSize;
             int x = (int)Math.Floor(pos.x / cubeSize);
             int y = (int)Math.Floor(pos.y / cubeSize);
             int z = (int)Math.Floor(pos.z / cubeSize);
-            int v = this.VoxelAtCoordinates(x, y, z);
+            byte v = this.VoxelAtCoordinates(x, y, z);
             return v;
         }
 
-        public int VoxelAtPosition(Position pos, int val)
+        public byte VoxelAtPosition(Position pos, byte val)
         {
             int cubeSize = this.cubeSize;
             int x = (int)Math.Floor(pos.x / cubeSize);
             int y = (int)Math.Floor(pos.y / cubeSize);
             int z = (int)Math.Floor(pos.z / cubeSize);
-            int v = this.VoxelAtCoordinates(x, y, z, val);
+            byte v = this.VoxelAtCoordinates(x, y, z, val);
             return v;
         }
 

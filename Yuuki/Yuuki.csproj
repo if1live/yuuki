@@ -36,6 +36,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chunk.cs" />
     <Compile Include="Chunker.cs" />
     <Compile Include="ChunkGenerator.cs" />
     <Compile Include="Helper.cs" />

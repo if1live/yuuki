@@ -116,16 +116,16 @@ namespace YuukiTest
             Chunker chunker = new Chunker(param);
 
             ChunkerBound bound = chunker.GetBounds(0, 0, 0);
-            Assert.AreEqual(bound.low, new Position(0, 0, 0));
-            Assert.AreEqual(bound.high, new Position(32, 32, 32));
+            Assert.AreEqual(bound.low, new VoxelPosition(0, 0, 0));
+            Assert.AreEqual(bound.high, new VoxelPosition(32, 32, 32));
 
             bound = chunker.GetBounds(1, 0, 0);
-            Assert.AreEqual(bound.low, new Position(32, 0, 0));
-            Assert.AreEqual(bound.high, new Position(64, 32, 32));
+            Assert.AreEqual(bound.low, new VoxelPosition(32, 0, 0));
+            Assert.AreEqual(bound.high, new VoxelPosition(64, 32, 32));
 
             bound = chunker.GetBounds(-1, 0, 0);
-            Assert.AreEqual(bound.low, new Position(-32, 0, 0));
-            Assert.AreEqual(bound.high, new Position(0, 32, 32));
+            Assert.AreEqual(bound.low, new VoxelPosition(-32, 0, 0));
+            Assert.AreEqual(bound.high, new VoxelPosition(0, 32, 32));
         }
 
         [Test]
@@ -153,7 +153,7 @@ namespace YuukiTest
             Assert.AreEqual(actual, expected);
         }
 
-        /*
+        
         [Test]
         public void TestGenerateChunk()
         {
@@ -164,13 +164,12 @@ namespace YuukiTest
             Chunker chunker = new Chunker(param);
 
             chunker.GenerateChunk(0, 0, 0);
-            Assert.AreEqual(!!chunker.chunks['0|0|0'], true);
+            Assert.IsNotNull(chunker.chunks["0|0|0"]);
             chunker.GenerateChunk(1, 0, 0);
-            Assert.AreEqual(!!chunker.chunks['1|0|0'], true);
+            Assert.IsNotNull(chunker.chunks["1|0|0"]);
             chunker.GenerateChunk(-1, 0, 0);
-            Assert.AreEqual(!!chunker.chunks['-1|0|0'], true);
+            Assert.IsNotNull(chunker.chunks["-1|0|0"]);
         }
-         * */
 
         /*
         [Test]
@@ -195,7 +194,6 @@ namespace YuukiTest
         }
          */
 
-        /*
         [Test]
         public void TestVoxelAtCoordinates()
         {
@@ -205,19 +203,39 @@ namespace YuukiTest
             param.cubeSize = 1;
             Chunker chunker = new Chunker(param);
 
-            //chunker.generateChunk(0, 0, 0)
+            chunker.GenerateChunk(0, 0, 0);
             Assert.AreEqual(chunker.VoxelAtCoordinates(0, 16, 0), 0);
             Assert.AreEqual(chunker.VoxelAtCoordinates(0, 16, 0, 1), 0);
             Assert.AreEqual(chunker.VoxelAtCoordinates(0, 16, 0), 1);
             Assert.AreEqual(chunker.VoxelAtCoordinates(0, 16, 0, 0), 1);
             Assert.AreEqual(chunker.VoxelAtCoordinates(0, 16, 0), 0);
-            Assert.AreEqual(chunker.VoxelAtCoordinates(-1, 0, 0), false);
-            Assert.AreEqual(chunker.VoxelAtCoordinates(-1, 0, 0, 1), false);
-            Assert.AreEqual(chunker.VoxelAtCoordinates(-1, 0, 0), false);
-        }
-         */
 
-        /*
+            try
+            {
+                Assert.AreEqual(chunker.VoxelAtCoordinates(-1, 0, 0), null);
+                Assert.Fail();
+            }
+            catch (KeyNotFoundException e) { }
+            try
+            {
+                Assert.AreEqual(chunker.VoxelAtCoordinates(-1, 0, 0, 1), null);
+                Assert.Fail();
+            }
+            catch (KeyNotFoundException e) { }
+            try
+            {
+                Assert.AreEqual(chunker.VoxelAtCoordinates(-1, 0, 0, 1), null);
+                Assert.Fail();
+            }
+            catch (KeyNotFoundException e) { }
+            try
+            {
+                Assert.AreEqual(chunker.VoxelAtCoordinates(-1, 0, 0), null);
+                Assert.Fail();
+            }
+            catch (KeyNotFoundException e) { }
+        }
+
         [Test]
         public void TestVoxelAtPosition()
         {
@@ -227,11 +245,10 @@ namespace YuukiTest
             param.cubeSize = 1;
             Chunker chunker = new Chunker(param);
 
-            //chunker.generateChunk(0, 0, 0)
+            chunker.GenerateChunk(0, 0, 0);
             Assert.AreEqual(chunker.VoxelAtPosition(new Position(0, 16, 0), 1), 0);
             Assert.AreEqual(chunker.VoxelAtPosition(new Position(0, 16.9999f, 0)), 1);
         }
-         */
     }
 
 }
