@@ -17,6 +17,67 @@ namespace Yuuki
         }
     }
 
+    /*
+     * https://github.com/maxogden/voxel/blob/master/index.js#L83-L94
+     */
+    public class VoxelExampleFactory
+    {
+        public VoxelData Sphere()
+        {
+            VoxelPosition low = new VoxelPosition(-16,-16,-16);
+            VoxelPosition high = new VoxelPosition(16,16,16);
+            IChunkGenerator generator = new SphereChunkGenerator();
+            return Voxel.Generate(low, high, generator);
+        }
+
+        public VoxelData Noise()
+        {
+            VoxelPosition low = new VoxelPosition(0,0,0);
+            VoxelPosition high = new VoxelPosition(16,16,16);
+            IChunkGenerator generator = new NoiseChunkGenerator();
+            return Voxel.Generate(low, high, generator);
+        }
+
+        public VoxelData DenseNoise()
+        {
+            VoxelPosition low = new VoxelPosition(0,0,0);
+            VoxelPosition high = new VoxelPosition(16,16,16);
+            IChunkGenerator generator = new DenseNoiseChunkGenerator();
+            return Voxel.Generate(low, high, generator);
+        }
+        /*
+        public VoxelData Checker()
+        {
+            VoxelPosition low = new VoxelPosition(0,0,0);
+            VoxelPosition high = new VoxelPosition(8, 8, 8);
+            IChunkGenerator generator = new CheckChunkGenerator();
+            return Voxel.Generate(low, high, generator);
+        }
+         */
+        public VoxelData Hill()
+        {
+            VoxelPosition low = new VoxelPosition(-16, 0, -16);
+            VoxelPosition high = new VoxelPosition(16,16,16);
+            IChunkGenerator generator = new HillChunkGenerator();            
+            return Voxel.Generate(low, high, generator);
+        }
+        public VoxelData Valley()
+        {
+            VoxelPosition low = new VoxelPosition(0,0,0);
+            VoxelPosition high = new VoxelPosition(32,32,32);
+            IChunkGenerator generator = new ValleyChunkGenerator();
+            return Voxel.Generate(low, high, generator);
+        }
+
+        public VoxelData HillyTerrain()
+        {
+            VoxelPosition low = new VoxelPosition(0,0,0);
+            VoxelPosition high = new VoxelPosition(32,32,32);
+            IChunkGenerator generator = new HillyTerrainChunkGenerator();
+            return Voxel.Generate(low, high, generator);
+        }     
+    }
+
     public class Voxel
     {
         public float Scale(int x, int fromLow, int fromHigh, int toLow, int toHigh)
@@ -25,7 +86,7 @@ namespace Yuuki
         }
 
         // from https://github.com/mikolalysenko/mikolalysenko.github.com/blob/master/MinecraftMeshes2/js/testdata.js#L4
-        public VoxelData Generate(VoxelPosition l, VoxelPosition h, IChunkGenerator f)
+        public static VoxelData Generate(VoxelPosition l, VoxelPosition h, IChunkGenerator f)
         {
             /*
              * js상의 함수 인자는 4개이다.

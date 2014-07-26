@@ -67,10 +67,10 @@ namespace Yuuki
 
     public struct ChunkerBound
     {
-        public Position low;
-        public Position high;
+        public VoxelPosition low;
+        public VoxelPosition high;
 
-        public ChunkerBound(Position low, Position high)
+        public ChunkerBound(VoxelPosition low, VoxelPosition high)
         {
             this.low = low;
             this.high = high;
@@ -170,8 +170,8 @@ namespace Yuuki
         public ChunkerBound GetBounds(int x, int y, int z)
         {
             int bits = this.chunkBits;
-            Position low = new Position(x << bits, y << bits, z << bits);
-            Position high = new Position((x + 1) << bits, (y + 1) << bits, (z + 1) << bits);
+            VoxelPosition low = new VoxelPosition(x << bits, y << bits, z << bits);
+            VoxelPosition high = new VoxelPosition((x + 1) << bits, (y + 1) << bits, (z + 1) << bits);
             return new ChunkerBound(low, high);
         }
 
