@@ -18,6 +18,34 @@ namespace Yuuki
         }
     }
 
+    public struct ChunkDimension
+    {
+        public int x;
+        public int y;
+        public int z;
+
+        public ChunkDimension(int x, int y, int z)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+    }
+
+    public struct VoxelPosition
+    {
+        public int x;
+        public int y;
+        public int z;
+
+        public VoxelPosition(int x, int y, int z)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+    }
+
     public struct ChunkPosition
     {
         public int x;
@@ -190,7 +218,7 @@ namespace Yuuki
 
         public int VoxelIndexFromPosition(Position pos)
         {
-            ChunkPosition v = this.VoxelVector(pos);
+            VoxelPosition v = this.VoxelVector(pos);
             return this.VoxelIndex(v);
         }
 
@@ -248,21 +276,21 @@ namespace Yuuki
         }
 
         // deprecated
-        public int VoxelIndex(ChunkPosition voxelVector)
+        public int VoxelIndex(VoxelPosition voxelVector)
         {
             int vidx = VoxelIndexFromCoordinates(voxelVector.x, voxelVector.y, voxelVector.z);
             return vidx;
         }
 
         // deprecated
-        public ChunkPosition VoxelVector(Position pos)
+        public VoxelPosition VoxelVector(Position pos)
         {
             int cubeSize = this.cubeSize;
             int mask = (1 << this.chunkBits) - 1;
             int vx = (int)(Math.Floor(pos.x / cubeSize)) & mask;
             int vy = (int)(Math.Floor(pos.y / cubeSize)) & mask;
             int vz = (int)(Math.Floor(pos.z / cubeSize)) & mask;
-            return new ChunkPosition(vx, vy, vz);
+            return new VoxelPosition(vx, vy, vz);
         }
     }
 }

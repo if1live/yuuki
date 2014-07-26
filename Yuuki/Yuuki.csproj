@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Chunker.cs" />
+    <Compile Include="ChunkGenerator.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="MathHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
