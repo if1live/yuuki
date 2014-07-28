@@ -10,5 +10,5 @@
 
 "%VS120COMNTOOLS%\..\IDE\devenv.exe" /build Release %BASE_DIR%Yuuki.sln
 %UNITY_PATH% -quit -batchmode -projectPath %WIN_PROJ_DIR% -executeMethod ScriptBatch.BuildWinGame
-%UNITY_PATH% -quit -batchmode -projectPath %ANDROID_PROJ_DIR% -executeMethod ScriptBatch.BuildAndroidGame
-%UNITY_PATH% -quit -batchmode -projectPath %WEB_PROJ_DIR% -executeMethod ScriptBatch.BuildWebGame
+@rem %UNITY_PATH% -quit -batchmode -projectPath %ANDROID_PROJ_DIR% -executeMethod ScriptBatch.BuildAndroidGame
+@rem %UNITY_PATH% -quit -batchmode -projectPath %WEB_PROJ_DIR% -executeMethod ScriptBatch.BuildWebGame

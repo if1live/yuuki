@@ -4,11 +4,13 @@
 @set ANDROID_PROJ_DIR=%BASE_DIR%\ClientAndroid
 @set WEB_PROJ_DIR=%BASE_DIR%\ClientWeb
 
-mkdir %ANDROID_PROJ_DIR%
-mkdir %WEB_PROJ_DIR%
 
-mklink /j %ANDROID_PROJ_DIR%\Assets %WIN_PROJ_DIR%\Assets
-mklink /j %ANDROID_PROJ_DIR%\ProjectSettings %WIN_PROJ_DIR%\ProjectSettings
+@rem use only pc build
 
-mklink /j %WEB_PROJ_DIR%\Assets %WIN_PROJ_DIR%\Assets
-mklink /j %WEB_PROJ_DIR%\ProjectSettings %WIN_PROJ_DIR%\ProjectSettings
+@rem mkdir %ANDROID_PROJ_DIR%
+@rem mklink /j %ANDROID_PROJ_DIR%\Assets %WIN_PROJ_DIR%\Assets
+@rem mklink /j %ANDROID_PROJ_DIR%\ProjectSettings %WIN_PROJ_DIR%\ProjectSettings
+
+@rem mkdir %WEB_PROJ_DIR%
+@rem mklink /j %WEB_PROJ_DIR%\Assets %WIN_PROJ_DIR%\Assets
+@rem mklink /j %WEB_PROJ_DIR%\ProjectSettings %WIN_PROJ_DIR%\ProjectSettings
