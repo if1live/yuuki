@@ -5,9 +5,65 @@ using System.Text;
 
 namespace Yuuki
 {
+    public class ChunkGeneratorHelper
+    {
+        IChunkGenerator generator;
+        public ChunkGeneratorHelper(IChunkGenerator generator)
+        {
+            this.generator = generator;
+        }
+        public Chunk Generate()
+        {
+            return Generate(generator.Low, generator.High);
+        }
+        public Chunk Generate(VoxelPosition l, VoxelPosition h)
+        {
+            // from https://github.com/mikolalysenko/mikolalysenko.github.com/blob/master/MinecraftMeshes2/js/testdata.js#L4
+            /*
+             * js상의 함수 인자는 4개이다.
+             * https://github.com/maxogden/voxel/blob/master/index.js#L24
+             * function generate(l, h, f, game) {
+             * 
+             * 하지만 voxel.js의 샘플을 보면 3개만 쓴다
+             * https://github.com/maxogden/voxel
+             * voxel.generate([0,0,0], [32,32,32], voxel.generator['Hilly Terrain'])
+             * 
+             * 마지막 인자는 레거시의 흔적으로 추정되서 지웠다.
+             */
+            ChunkDimension d = new ChunkDimension(h.x - l.x, h.y - l.y, h.z - l.z);
+            byte[] v = new byte[d.x * d.y * d.z];
+            var n = 0;
+            for (int k = l.z; k < h.z; ++k)
+            {
+                for (int j = l.y; j < h.y; ++j)
+                {
+                    for (int i = l.x; i < h.x; ++i, ++n)
+                    {
+                        v[n] = generator.Get(i, j, k);
+                        /*
+                         * js 원본의 코드는 f에 인자가 5개 넘어간다. 
+                         * https://github.com/maxogden/voxel/blob/master/index.js#L31
+                         * v[n] = f(i,j,k,n,game)
+                         * 
+                         * 하지만 chunk generator은 인자 3개만 쓰니 나머지는 버림
+                         * 지금 당장은 있어봐야 의미가 없다
+                         */
+                    }
+                }
+            }
+
+            Chunk data = new Chunk(v, d);
+            return data;
+        }
+
+    }
+
     public interface IChunkGenerator
     {
         byte Get(int i, int j, int k);
+        VoxelPosition Low { get; }
+        VoxelPosition High { get; }
+        Chunk Generate();
     }
 
     // shape and terrain generator functions
@@ -17,6 +73,13 @@ namespace Yuuki
         {
             var retval = i*i+j*j+k*k <= 16*16 ? 1 : 0;
             return (byte)retval;
+        }
+        public VoxelPosition Low { get { return new VoxelPosition(-16, -16, -16); } }
+        public VoxelPosition High { get { return new VoxelPosition(16, 16, 16); } }
+
+        public Chunk Generate()
+        {
+            return new ChunkGeneratorHelper(this).Generate();
         }
     }
 
@@ -38,7 +101,15 @@ namespace Yuuki
                 return 0;
             }
         }
-    } 
+
+        public VoxelPosition Low { get { return new VoxelPosition(0, 0, 0); } }
+        public VoxelPosition High { get { return new VoxelPosition(16, 16, 16); } }
+
+        public Chunk Generate()
+        {
+            return new ChunkGeneratorHelper(this).Generate();
+        }
+    }
 
     class DenseNoiseChunkGenerator : IChunkGenerator
     {
@@ -57,6 +128,14 @@ namespace Yuuki
             double val = random.NextDouble() * flag;
             return (byte)Math.Round(val);
         }
+
+        public VoxelPosition Low { get { return new VoxelPosition(0, 0, 0); } }
+        public VoxelPosition High { get { return new VoxelPosition(16, 16, 16); } }
+
+        public Chunk Generate()
+        {
+            return new ChunkGeneratorHelper(this).Generate();
+        }
     }
 
     /*
@@ -66,6 +145,8 @@ namespace Yuuki
         {
             return !!((i+j+k)&1) ? (((i^j^k)&2) ? 1 : 0xffffff) : 0;
         }
+     * VoxelPosition low = new VoxelPosition(0,0,0);
+            VoxelPosition high = new VoxelPosition(8, 8, 8);
     }
      * */
 
@@ -77,6 +158,13 @@ namespace Yuuki
             return (byte)retval;
         }
 
+        public VoxelPosition Low { get { return new VoxelPosition(-16, 0, -16); } }
+        public VoxelPosition High { get { return new VoxelPosition(16, 16, 16); } }
+
+        public Chunk Generate()
+        {
+            return new ChunkGeneratorHelper(this).Generate();
+        }
     }
 
     class ValleyChunkGenerator : IChunkGenerator
@@ -86,7 +174,13 @@ namespace Yuuki
             var retval = j <= (i*i + k*k) * 31 / (32*32*2) + 1 ? 1 : 0;
             return (byte)retval;
         }
+        public VoxelPosition Low { get { return new VoxelPosition(0, 0, 0); } }
+        public VoxelPosition High { get { return new VoxelPosition(32, 32, 32); } }
 
+        public Chunk Generate()
+        {
+            return new ChunkGeneratorHelper(this).Generate();
+        }
     }
 
     class HillyTerrainChunkGenerator : IChunkGenerator
@@ -117,8 +211,65 @@ namespace Yuuki
             }
             return 3;
         }
+
+        public VoxelPosition Low { get { return new VoxelPosition(0, 0, 0); } }
+        public VoxelPosition High { get { return new VoxelPosition(32, 32, 32); } }
+
+        public Chunk Generate()
+        {
+            return new ChunkGeneratorHelper(this).Generate();
+        }
     }
-  
+
+    /*
+     * https://github.com/mikolalysenko/mikolalysenko.github.com/blob/master/MinecraftMeshes/js/testdata.js
+     * 에서 긁어온 샘플 몇개
+     */
+    class CubeChunkGenerator : IChunkGenerator
+    {
+        int size;
+
+        public CubeChunkGenerator(int size)
+        {
+            this.size = size;
+        }
+
+        public byte Get(int i, int j, int k)
+        {
+            return 1;
+        }
+
+        public VoxelPosition Low { get { return new VoxelPosition(0, 0, 0); } }
+        public VoxelPosition High { get { return new VoxelPosition(size, size, size); } }
+
+        public Chunk Generate()
+        {
+            return new ChunkGeneratorHelper(this).Generate();
+        }
+    }
+
+    class HoleChunkGenerator : IChunkGenerator
+    {
+        public VoxelPosition Low { get { return new VoxelPosition(0, 0, 0); } }
+        public VoxelPosition High { get { return new VoxelPosition(16, 16, 1); } }
+
+        public byte Get(int i, int j, int k)
+        {
+            if(Math.Abs(i-7) > 3 || Math.Abs(j-7) > 3)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public Chunk Generate()
+        {
+            return new ChunkGeneratorHelper(this).Generate();
+        }
+    }
 }
 
 

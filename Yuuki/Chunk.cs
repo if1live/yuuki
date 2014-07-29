@@ -28,7 +28,8 @@ namespace Yuuki
     {
         public Chunk Generate(VoxelPosition low, VoxelPosition high)
         {
-            return Voxel.Generate(low, high, new ValleyChunkGenerator());
+            IChunkGenerator generator = new ValleyChunkGenerator();
+            return new ChunkGeneratorHelper(generator).Generate(low, high);
         }
     }
 
