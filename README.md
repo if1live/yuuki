@@ -6,6 +6,7 @@ unity sample game
 * Open ```Client``` unity project
 * Import unity package in ```ExternalClientLibrary/```
 * Import external asset from asset store(see below list)
+* Install [Visual Studio Tools for Unity](http://blogs.msdn.com/b/visualstudio/archive/2014/07/29/visual-studio-tools-for-unity-1-9.aspx)
 * Close unity
 * ```bin/setup_proj.bat```
 * Open ```ClientAndroid``` project, Switch platform to android, Close unity
@@ -14,7 +15,6 @@ unity sample game
 
 ## external asset
 * [Unity Test Tools](https://www.assetstore.unity3d.com/en/#!/content/13802)
-
 
 ## Fast Platform Switching in Unity
 해당 프로젝트는 데탑과 모바일을 동시에 지원한다. 유니티의 경우 플랫폼 변환이 느리기때문에 편법을 쓴다
